@@ -16,7 +16,7 @@ class ShopPage extends Component {
             {
                 collections.map(({id, ...otherCollectionsProps}) => (
                     <CollectionPreview key={id} {...otherCollectionsProps}/>
-                    // otherCollectionsPropos includes 'item' in the top object from which the CollectionPreview will pull its id and name i.e. item.id (which is different from 'id' in the top shop_data object and is passed as 'key' in CollectionPreview) and item.name
+                    // otherCollectionsPropos includes 'item' in the top object from which the CollectionPreview will pull its id and name i.e. item.id or just 'id' (which is different from 'id' in the top shop_data object and is passed as 'key' in CollectionPreview) and item.name or just 'name'.
                 ))
             }
         </div>

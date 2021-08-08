@@ -6,7 +6,7 @@ import HomePage from './pages/homepage/homepage.component'
 import ShopPage from './pages/shop/shop.component'
 import Header from './components/header/header.component'
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component'
-import {auth} from '../src/firebase/firebase.utils';
+import {auth, createUserProfileDocument} from '../src/firebase/firebase.utils';
 
 class App extends Component {
 
@@ -25,8 +25,29 @@ class App extends Component {
 
   componentDidMount() {
     // We will get current user and user state from firebase
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(user => { 
-      this.setState({currentUser: user})
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+
+      if(userAuth) {
+        // see lecture 104: checking if our db has updated with the user data
+        const userRef = await createUserProfileDocument(userAuth);
+        userRef.onSnapshot(snapShot => {
+          this.setState({
+            currentUser: {
+              id: snapShot.id,
+              ...snapShot.data()
+            }
+          });
+          // }, () =>  {console.log(this.state)});
+          // console.log(snapShot)
+          // console.log(snapShot.data())
+          // console.log(this.state)
+        })
+      } else {
+        this.setState({currentUser: userAuth}) //sets to null if user logs out
+      }
+
+      // createUserProfileDocument(userAuth) 
+      // this.setState({currentUser: userAuth})
 
       // console.log(user);
     })

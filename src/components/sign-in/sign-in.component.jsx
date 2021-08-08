@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import FormInput from '../../components/form-input/form-input.component'
 import CustomButton from '../../components/custom-button/custom-button.component'
 
-import {signInWithGoogle} from '../../firebase/firebase.utils'
+import {auth, signInWithGoogle} from '../../firebase/firebase.utils'
 import './sign-in.styles.scss'
 
 class SignIn extends Component {
@@ -15,9 +15,17 @@ class SignIn extends Component {
         }
     }
 
-    handleSubmit = event => { //remember that arrow function binds this function to the class automatically -> this.handleSubmit
+    handleSubmit = async event => { //remember that arrow function binds this function to the class automatically -> this.handleSubmit
+        const {email, password} = this.state;
         event.preventDefault(); //preventing default form behavior so we have full control over what happens
-        this.setState({email: '', password: ''}) //clear out the state of our form upon sign in
+        try {
+            await auth.signInWithEmailAndPassword(email, password);
+            this.setState({email: '', password: ''}) //clear out the state of our form upon sign in
+    
+        } catch (error) {
+            // console.error(error)
+        };
+    
 
     }
   

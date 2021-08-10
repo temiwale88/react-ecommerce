@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Switch, Route} from 'react-router-dom';
+import {Switch, Route, Redirect} from 'react-router-dom';
 import './App.css';
 import {connect} from 'react-redux';
 import {setCurrentUser} from './redux/user/user.actions';
@@ -83,12 +83,24 @@ class App extends Component {
         <Switch>
           <Route exact path ='/' component={HomePage} />
           <Route exact path ='/shop' component={ShopPage} />
-          <Route exact path ='/signin' component={SignInAndSignUpPage} />
+          {/* <Route exact path ='/signin' component={SignInAndSignUpPage} /> */}
+          {/* We don't want to allow a signed in user to access the sign in page so we'll redirect them. Also upon first sign in we'll get redirected to homepage...see below! */}
+          <Route exact path ='/signin' render={() => 
+            this.props.currentUser ? 
+            (<Redirect to='/' />): (
+              <SignInAndSignUpPage/>
+            )} 
+          />
         </Switch>
       </div>
     )  
   }
 }
+
+// destructure our 'user' reducer by {user}
+const mapStateToProps = ({user}) =>({
+  currentUser: user.currentUser //see header.component.jsx for how we're passing in an object called 'currentUser' into the component we're transforming since "connect, which receives mapStateToProps and mapDispatchToProps functions, is a "higher order" component
+})
 
 // map "dispatch" to props of my App component
 const mapDispatchToProps = dispatch => ({
@@ -96,4 +108,7 @@ const mapDispatchToProps = dispatch => ({
   setCurrentUser: user => dispatch(setCurrentUser(user))
 })
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(
+  mapStateToProps, //we will now have access to this.props.currentUser (in the App component?) lecture 119
+  mapDispatchToProps
+)(App);

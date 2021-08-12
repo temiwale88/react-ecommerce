@@ -27,6 +27,7 @@ class App extends Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
+    // setCurrentUser here and in this component comes from mapDispatchToProps which in turn comes from our import statement from user.action. We're destructuring it with {} from "this.props" which is passed in by the mapDispatchToProps function.
     const {setCurrentUser} = this.props;
     // We will get current user and user state from firebase
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
@@ -71,6 +72,16 @@ class App extends Component {
 
   componentWillUnmount() {
     this.unsubscribeFromAuth(); //closes the subscription
+    // See comment from classmate Alex #questions/10432834 on lecture 96
+    // "unsubscribeFromAuth is initialised as null
+
+    // unsubscribeFromAuth is reassigned to the return value of calling auth.onAuthStateChanged(). Yihua doesn't say this in the vid but this method returns another method: firebase.unsubscribe().
+
+    // (see docs here: https://firebase.google.com/docs/reference/js/firebase.auth.Auth#returns-firebase.unsubscribe)
+
+    // so when unsubscribeFromAuth() is called inside the componentWillUnmount, it now has the value of firebase.unsubscribe(), which executes, closing the session."
+
+
   }
 
 
@@ -103,9 +114,16 @@ const mapStateToProps = ({user}) =>({
 })
 
 // map "dispatch" to props of my App component
+// We're dispatching an action here:
 const mapDispatchToProps = dispatch => ({
   // setCurrentUser is from user.actions
   setCurrentUser: user => dispatch(setCurrentUser(user))
+  // dispatch(setCurrentUser(user)) is the same as saying:
+  // dispatch({
+  //   type: UserActionTypes.SET_CURRENT_USER,
+  //   payload: user
+  // })
+  // setCurrentUser here comes from our import statement from user.action
 })
 
 export default connect(

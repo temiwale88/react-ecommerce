@@ -1,0 +1,7 @@
+See resources
+- mapStateToProps: https://learn.co/lessons/map-state-to-props-readme
+    Discusses provider, connect etc.
+
+- mapDispatchToProps: https://react-redux.js.org/using-react-redux/connect-mapdispatch
+
+- Full and free course: https://egghead.io/lessons/react-redux-the-single-immutable-state-tree

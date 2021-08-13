@@ -5,3 +5,5 @@ See resources
 - mapDispatchToProps: https://react-redux.js.org/using-react-redux/connect-mapdispatch
 
 - Full and free course: https://egghead.io/lessons/react-redux-the-single-immutable-state-tree
+
+- See your cart-dropdown.component.jsx file for very explicit comments on how things work include mapStateToProps

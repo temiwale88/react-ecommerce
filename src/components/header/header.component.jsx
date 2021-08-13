@@ -33,6 +33,13 @@ const Header = ({currentUser, hidden}) => (
     </div>
 );
 
+/*
+See 15162908#questions/12840499 to see response from Dan to me on how the state is now accessed, with Redux implementation, by our components. It's the "Provider" and "connect()"!
+
+Dan: 
+"it is both. Provider "provides" the store to all the children components by being placed as the root component in the component tree. Connect allows us to use the store state in any component we want directly."
+*/
+
 // mapStateToProps passes the state we're receivign from global store as a 'prop' to the component we're calling.
 // "user" and "cart" are coming from our slices (different) states passed into root-reducer.js (see the file). The root-reducer which is passed into store.js which is the stored state data that's passed into the "Provider" component in index.js so our components can experct "user" and "cart" exactly since the component wrapping them (Provider) has the "store" prop that is going to be passed into whatever component we're calling. Still weird but close! 
 // OR state.user.CurrentUser and state.cart.hidden if you didn't destructure this way.

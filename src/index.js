@@ -9,6 +9,14 @@ import App from './App';
 // import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 
+
+/*
+See 15162908#questions/12840499 to see response from Dan to me on how the state is now accessed, with Redux implementation, by our components. It's the "Provider" and "connect()"!
+
+Dan: 
+"it is both. Provider "provides" the store to all the children components by being placed as the root component in the component tree. Connect allows us to use the store state in any component we want directly."
+*/
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>

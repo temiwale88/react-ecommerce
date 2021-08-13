@@ -17,7 +17,8 @@ const cartReducer = (state = INITIAL_STATE, action) => {
         case CartActionTypes.ADD_ITEM:
             return{
                 ...state, 
-                cartItems: addItemToCart(state.cartItems, action.payload)
+                cartItems: addItemToCart(state.cartItems, action.payload) //this is so we return a quantity and action.payload is the new item we're adding which is evaluated as 'new' or if exists in the cart array of items, added to existing 'like' item. 
+                
                 // cartItems: [...state.cartItems, action.payload]
                 // see lecture 124 - Cart Item Reducer
             }

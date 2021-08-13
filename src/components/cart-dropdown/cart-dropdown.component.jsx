@@ -3,6 +3,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 import CustomButton from '../custom-button/custom-button.component'
 import CartItem from '../cart-item/cart-item.component';
+import { selectCartItems } from '../../redux/cart/cart.selector';
+
 
 import './cart-dropdown.styles.scss'
 
@@ -35,9 +37,23 @@ const CartDropdown = ({cartItems}) => (
 // })
 
 //OR by destructuring even more explicitly especially in the case
-// you have multiple state slices to destructure. 
-const mapStateToProps = ({cart: {cartItems}}) =>({
-    cartItems,
+// you have multiple state slices to destructure. Here we desctructure off cart from state then we destructure 'cartItems' from state.cart
+// const mapStateToProps = ({cart: {cartItems}}) =>({
+//     cartItems,
+// })
+
+// OR BETTER: after writing our selector function (memoization - lecture 131 - "Reselect library") we can pass it this way
+/*
+// Why from Yihua: 
+"
+...[T]his will make sure that our cart dropdown component is not getting re rendered whenever the state changes, that's unrelated to the cart items.
+
+So if we sign out our cart items in our cart drop down as well as our car items count is not changing.
+And therefore our cart dropdown and our cart icon component do not need to re render, which helps save us on performance.
+"
+*/
+const mapStateToProps = state =>({
+    cartItems: selectCartItems(state)
 })
 
 // In this case, we're calling the 'cartItems' value which is the returned value from the 'cartReducer' that is referenced in the object named "cart" in the root-reducer. The curly braces around {cartItems} is us saying we want to 'pull' that value or destructure it from the cart object. Further, 'cartItems' is now mapped to props, from the global redux managed-state, via connect to the cart-dropdown component.

@@ -1,7 +1,8 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {toggleCartHidden} from '../../redux/cart/cart.action'
-import {selectCartItemsCount} from '../../redux/cart/cart.selector'
+import {selectCartItemsCount} from '../../redux/cart/cart.selectors'
+import {createStructuredSelector} from 'reselect';
 
 import {ReactComponent as ShoppingIcon} from '../../assets/shopping-bag.svg'
 import './cart-icon.styles.scss'
@@ -10,6 +11,7 @@ const CartIcon = ({toggleCartHidden, itemCount}) => (
   <div className='cart-icon' onClick={toggleCartHidden}>
       <ShoppingIcon className='shopping-icon'/>
       <span className='item-count'>{itemCount}</span>
+      {/* {  console.log(toggleCartHidden)} */}
   </div>
 
 )
@@ -18,7 +20,7 @@ const CartIcon = ({toggleCartHidden, itemCount}) => (
 
 const mapDispatchToProps = dispatch => ({
   toggleCartHidden: () => dispatch(toggleCartHidden())
-  // "onClick", we're dispatching this action (toggles between hidden or not -> 'show') to our state 
+  // "onClick", we're dispatching (e.g. dispatch(this.action) this action (toggles between hidden or not -> 'show') to our state 
   // toggleCartHidden is the name we're passing to reference the toggleCartHidden() function we declared in our cart.action.js
   // so this essentially maps a function that triggers on 'onClick'
 })
@@ -31,9 +33,13 @@ const mapDispatchToProps = dispatch => ({
 
 // So for re-done code logic see - cart.selector in redux folder
 
-const mapStateToProps = state => ({
-  // this is a native array.reduce method
-  itemCount: selectCartItemsCount(state),
+// const mapStateToProps = state => ({
+//   itemCount: selectCartItemsCount(state),
+// })
+
+// Refactoring with selectors
+const mapStateToProps = createStructuredSelector({
+  itemCount: selectCartItemsCount,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(CartIcon);

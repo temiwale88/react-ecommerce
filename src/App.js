@@ -3,11 +3,15 @@ import {Switch, Route, Redirect} from 'react-router-dom';
 import './App.css';
 import {connect} from 'react-redux';
 import {setCurrentUser} from './redux/user/user.actions';
+import {selectCurrentUser} from './redux/user/user.selectors'
+import {createStructuredSelector} from 'reselect';
 
 import HomePage from './pages/homepage/homepage.component'
 import ShopPage from './pages/shop/shop.component'
 import Header from './components/header/header.component'
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component'
+import CheckoutPage from './pages/checkout/checkout.component'
+
 import {auth, createUserProfileDocument} from '../src/firebase/firebase.utils';
 
 class App extends Component {
@@ -93,7 +97,9 @@ class App extends Component {
         {/* Also, we're passing currentUser into Header because it has our 'sign out' link */}
         <Switch>
           <Route exact path ='/' component={HomePage} />
-          <Route exact path ='/shop' component={ShopPage} />
+          <Route path ='/shop' component={ShopPage} />
+          {/* We're not adding "exact" to the /shop Route because it's going to have nested routes e.g. shop/hats, shop/women etc. */}
+          <Route exact path ='/checkout' component={CheckoutPage} />
           {/* <Route exact path ='/signin' component={SignInAndSignUpPage} /> */}
           {/* We don't want to allow a signed in user to access the sign in page so we'll redirect them. Also upon first sign in we'll get redirected to homepage...see below! */}
           <Route exact path ='/signin' render={() => 
@@ -109,8 +115,18 @@ class App extends Component {
 }
 
 // destructure our 'user' reducer by {user}
-const mapStateToProps = ({user}) =>({
-  currentUser: user.currentUser //see header.component.jsx for how we're passing in an object called 'currentUser' into the component we're transforming since "connect, which receives mapStateToProps and mapDispatchToProps functions, is a "higher order" component
+// const mapStateToProps = ({user}) =>({
+//   currentUser: user.currentUser //see header.component.jsx for how we're passing in an object called 'currentUser' into the component we're transforming since "connect, which receives mapStateToProps and mapDispatchToProps functions, is a "higher order" component
+// })
+
+// AFTER re-factoring to using selectors:
+// const mapStateToProps = state =>({
+//   currentUser: selectCurrentUser(state)
+// })
+
+// With createStructuredSelector
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser
 })
 
 // map "dispatch" to props of my App component

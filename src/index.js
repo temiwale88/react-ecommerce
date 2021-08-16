@@ -2,7 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter as Router} from 'react-router-dom';
 import {Provider} from 'react-redux';
-import store from './redux/store';
+
+import {PersistGate} from 'redux-persist/integration/react';
+
+import { store, persistor } from './redux/store';
 
 import './index.css';
 import App from './App';
@@ -18,13 +21,16 @@ Dan:
 */
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
+  <Provider store={store}>
       <Router>
-        <App />
+      <React.StrictMode>
+        {/* persistgate receives the store from <Provider/> component and fires up actions to 'rehydrate' the state when application refreshes  */}
+        <PersistGate persistor={persistor}>
+          <App />
+        </PersistGate>
+      </React.StrictMode>
       </Router>
-    </Provider>
-  </React.StrictMode>,
+    </Provider>,
   document.getElementById('root')
 );
 

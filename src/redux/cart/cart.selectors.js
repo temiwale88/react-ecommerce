@@ -3,7 +3,7 @@ import {createSelector} from 'reselect';
 /*
 See the flow, below:
 
-get cart
+get cart from state
     |
     v
 get cartItems from cart
@@ -18,7 +18,7 @@ get cartItems count from cartItems
 const selectCart = state => state.cart;
 // This is an input selector
 
-// Now this is memoized because of createSelector - lecture 131 (Reselect library)
+// Now this is memoized ('cached') because of createSelector - lecture 131 (Reselect library)
 export const selectCartItems = createSelector(
     [selectCart], //an array of input selectors like above in order they were written
     (cart) => cart.cartItems //cart from cart.cartItems comes from the 'selectCart' function above

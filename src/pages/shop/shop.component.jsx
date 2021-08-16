@@ -1,26 +1,17 @@
-import React, {Component} from 'react';
-import SHOP_DATA from './shop.data.js'
-import CollectionPreview from '../../components/collection-preview/collection-preview.component'
+import React from 'react';
+import CollectionsOverview from '../../components/collections-overview/collections-overview.component'
+import {Route} from 'react-router-dom'
+import CollectionPage from '../collection/collection.component'
 
-class ShopPage extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            collections: SHOP_DATA
-        }
-    }
+const ShopPage = ({match}) => (
+// We have access to 'match' because in the App.js we nest ShopPage in Route component which passes its property (including 'match', 'location', and 'history') to the ShopPage component. In this case we passed '/shop' to the path in App.js for ShopPage component and that's what our match.path will be.
+// console.log(match)
 
-    render () {
-        const {collections} = this.state
-        return <div className='shop-page'>
-            {
-                collections.map(({id, ...otherCollectionsProps}) => (
-                    <CollectionPreview key={id} {...otherCollectionsProps}/>
-                    // otherCollectionsPropos includes 'item' in the top object from which the CollectionPreview will pull its id and name i.e. item.id or just 'id' (which is different from 'id' in the top shop_data object and is passed as 'key' in CollectionPreview) and item.name or just 'name'.
-                ))
-            }
-        </div>
-    }
-}
+    <div className='shop-page'>
+        <Route exact path = {`${match.path}`} component={CollectionsOverview} />
+        <Route path={`${match.path}/:collectionId`} component={CollectionPage} />
+    </div>
+)
+
 
 export default ShopPage;

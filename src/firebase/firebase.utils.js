@@ -56,6 +56,45 @@ if (!firebase.apps.length) {
     firebase.app(); // if already initialized, use that one
   }
 
+
+// Moving our shop_data to firestore  | lecturs 176 & 177 moving shop data to firestore
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+    const collectionRef = firestore.collection(collectionKey);
+    // console.log(collectionRef);
+    const batch = firestore.batch();
+    objectsToAdd.forEach(obj => {
+        const newDocRef = collectionRef.doc();
+        // console.log(newDocRef);
+        batch.set(newDocRef, obj);
+    });
+
+    return await batch.commit()
+}
+  
+
+// lecture 179
+export const convertCollectionsSnapshotToMap = (collections) => {
+    const transformedcollection = collections.docs.map(doc => {
+        const {title, items} = doc.data();
+
+        return {
+            routeName: encodeURI(title.toLowerCase()),
+            id: doc.id,
+            title,
+            items
+
+        }
+
+    });
+
+    // lecture 180
+    return transformedcollection.reduce((accumulator, collection) => {
+        accumulator[collection.title.toLowerCase()] = collection;
+        return accumulator;
+    }, {});
+    // console.log(transformedcollection)
+}
+
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 

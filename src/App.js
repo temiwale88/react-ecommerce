@@ -64,8 +64,9 @@ class App extends Component {
         })
       } else {
         setCurrentUser(userAuth);
-        // this.setState({currentUser: userAuth}) //sets to null if user logs out (or not in db?)
       }
+
+      // this.setState({currentUser: userAuth}) //sets to null if user logs out (or not in db?)
 
       // createUserProfileDocument(userAuth) 
       // this.setState({currentUser: userAuth})

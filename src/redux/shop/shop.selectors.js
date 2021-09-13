@@ -27,12 +27,12 @@ export const selectCollections = createSelector(
 // Lecture 151 (Data Normalization): Refactored because geting stored data in an array is slower than in an object / hash map. We changed SHOP_DATA to an object instead of an array
 export const selectCollection = collectionUrlParam => 
   createSelector([selectCollections], 
-    collections => collections[collectionUrlParam]
+    collections => collections ? collections[collectionUrlParam] : null
   );
 
 // Lecture 153 (Data flow in our app): for the sake of the other components that need this as an array, we will convert our object to an array with a new selector
 
 export const selectCollectionsForPreview = createSelector(
   [selectCollections], 
-  collections => Object.keys(collections).map(key => collections[key])
+  collections => collections ? Object.keys(collections).map(key => collections[key]): []
 )

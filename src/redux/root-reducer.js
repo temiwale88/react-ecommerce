@@ -34,6 +34,6 @@ const rootReducer = combineReducers({
 /*
     Per Yihua in lecture 142:
     " 
-    what we're exporting by default ...[is] this modified version of our root reducer with this persist config on top of it. So it's a modified version of our route reducer, except now with persistance capabilities, thanks to this persist reducer function that we got from Redux persist."
+    what we're exporting by default ...[is] this modified version of our root reducer with this persist config on top of it. So it's a modified version of our root reducer, except now with persistance capabilities, thanks to this persist reducer function that we got from Redux persist."
 */
 export default persistReducer(persistConfig, rootReducer);

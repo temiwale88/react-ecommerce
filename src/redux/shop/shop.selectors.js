@@ -36,3 +36,18 @@ export const selectCollectionsForPreview = createSelector(
   [selectCollections], 
   collections => collections ? Object.keys(collections).map(key => collections[key]): []
 )
+
+// Lecture 188
+export const selectIsCollectionFetching = createSelector(
+  [selectShop],
+  shop => shop.isFetching
+)
+
+// Lecture 190
+/* 
+Yihua: Our Selector checks to see if our collections is loaded. If there's no collections, then there's selectIsCollectionssLoaded is false
+*/
+export const selectIsCollectionsLoaded = createSelector(
+  [selectShop],
+  shop => !!shop.collections //True of False depending on if our collection is loaded or not - '!!'
+)

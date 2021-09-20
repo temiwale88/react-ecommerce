@@ -1,3 +1,5 @@
+Absolutely helpful (redux, thunk, and saga): https://www.eternussolutions.com/2020/12/21/redux-thunk-redux-saga/
+
 See resources
 - mapStateToProps: https://learn.co/lessons/map-state-to-props-readme
     Discusses provider, connect etc.
@@ -6,4 +8,4 @@ See resources
 
 - Full and free course: https://egghead.io/lessons/react-redux-the-single-immutable-state-tree
 
-- See your cart-dropdown.component.jsx file for very explicit comments on how things work include mapStateToProps
+- See your cart-dropdown.component.jsx file for very explicit comments on how things work including mapStateToProps

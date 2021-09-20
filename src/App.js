@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Switch, Route, Redirect} from 'react-router-dom';
 import './App.css';
 import {connect} from 'react-redux';
-import {setCurrentUser} from './redux/user/user.actions';
+// import {setCurrentUser} from './redux/user/user.actions';
 import {selectCurrentUser} from './redux/user/user.selectors'
 import {createStructuredSelector} from 'reselect';
 
@@ -12,7 +12,7 @@ import Header from './components/header/header.component'
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component'
 import CheckoutPage from './pages/checkout/checkout.component'
 
-import {auth, createUserProfileDocument} from '../src/firebase/firebase.utils';
+// import {auth, createUserProfileDocument} from '../src/firebase/firebase.utils';
 
 class App extends Component {
 
@@ -32,47 +32,47 @@ class App extends Component {
 
   componentDidMount() {
     // setCurrentUser here and in this component comes from mapDispatchToProps which in turn comes from our import statement from user.action. We're destructuring it with {} from "this.props" which is passed in by the mapDispatchToProps function.
-    const {setCurrentUser} = this.props;
+    // const {setCurrentUser} = this.props;
     // We will get current user and user state from firebase
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+    // this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
 
-      if(userAuth) {
-        // see lecture 104: checking if our db has updated with the user data
+    //   if(userAuth) {
+    //     // see lecture 104: checking if our db has updated with the user data
 
-        // firebase api call for current user
-        const userRef = await createUserProfileDocument(userAuth);
+    //     // firebase api call for current user
+    //     const userRef = await createUserProfileDocument(userAuth);
 
-        //Firebase concepts: snapshot gives us actual data vs. reference to that data
-        userRef.onSnapshot(snapShot => {
-          setCurrentUser({
-            id: snapShot.id,
-            ...snapShot.data() // equals action.payload
-          })
+    //     //Firebase concepts: snapshot gives us actual data vs. reference to that data
+    //     userRef.onSnapshot(snapShot => {
+    //       setCurrentUser({
+    //         id: snapShot.id,
+    //         ...snapShot.data() // equals action.payload
+    //       })
 
-          // See lecture 118 (mapDispatchToProps) on why we no longer need "this.setState" hint: redux and user.actions.js file 
+    //       // See lecture 118 (mapDispatchToProps) on why we no longer need "this.setState" hint: redux and user.actions.js file 
 
-          // this.setState({
-          //   currentUser: {
-          //     id: snapShot.id,
-          //     ...snapShot.data()
-          //   }
-          // });
-          // }, () =>  {console.log(this.state)});
-          // console.log(snapShot)
-          // console.log(snapShot.data())
-          // console.log(this.state)
-        })
-      } else {
-        setCurrentUser(userAuth);
-      }
+    //       // this.setState({
+    //       //   currentUser: {
+    //       //     id: snapShot.id,
+    //       //     ...snapShot.data()
+    //       //   }
+    //       // });
+    //       // }, () =>  {console.log(this.state)});
+    //       // console.log(snapShot)
+    //       // console.log(snapShot.data())
+    //       // console.log(this.state)
+    //     })
+    //   } else {
+    //     setCurrentUser(userAuth);
+    //   }
 
-      // this.setState({currentUser: userAuth}) //sets to null if user logs out (or not in db?)
+    //   // this.setState({currentUser: userAuth}) //sets to null if user logs out (or not in db?)
 
-      // createUserProfileDocument(userAuth) 
-      // this.setState({currentUser: userAuth})
+    //   // createUserProfileDocument(userAuth) 
+    //   // this.setState({currentUser: userAuth})
 
-      // console.log(user);
-    })
+    //   // console.log(user);
+    // })
   }
 
   componentWillUnmount() {
@@ -132,18 +132,18 @@ const mapStateToProps = createStructuredSelector({
 
 // map "dispatch" to props of my App component
 // We're dispatching an action here:
-const mapDispatchToProps = dispatch => ({
-  // setCurrentUser is from user.actions
-  setCurrentUser: user => dispatch(setCurrentUser(user))
-  // dispatch(setCurrentUser(user)) is the same as saying:
-  // dispatch({
-  //   type: UserActionTypes.SET_CURRENT_USER,
-  //   payload: user
-  // })
-  // setCurrentUser here comes from our import statement from user.action
-})
+// const mapDispatchToProps = dispatch => ({
+//   // setCurrentUser is from user.actions
+//   setCurrentUser: user => dispatch(setCurrentUser(user))
+//   // dispatch(setCurrentUser(user)) is the same as saying:
+//   // dispatch({
+//   //   type: UserActionTypes.SET_CURRENT_USER,
+//   //   payload: user
+//   // })
+//   // setCurrentUser here comes from our import statement from user.action
+// })
 
 export default connect(
   mapStateToProps, //we will now have access to this.props.currentUser (in the App component?) lecture 119
-  mapDispatchToProps
+  // mapDispatchToProps
 )(App);

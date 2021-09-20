@@ -1,8 +1,9 @@
 import React, {Component} from "react"; 
 import FormInput from '../../components/form-input/form-input.component'
 import CustomButton from '../../components/custom-button/custom-button.component'
-
-import {auth, signInWithGoogle} from '../../firebase/firebase.utils'
+import {connect} from 'react-redux'
+// import {auth, signInWithGoogle} from '../../firebase/firebase.utils'
+import {googleSignInStart, emailSignInStart} from '../../redux/user/user.actions'
 import './sign-in.styles.scss'
 
 class SignIn extends Component {
@@ -16,15 +17,20 @@ class SignIn extends Component {
     }
 
     handleSubmit = async event => { //remember that arrow function binds this function to the class automatically -> this.handleSubmit
-        const {email, password} = this.state;
         event.preventDefault(); //preventing default form behavior so we have full control over what happens
-        try {
-            await auth.signInWithEmailAndPassword(email, password);
-            this.setState({email: '', password: ''}) //clear out the state of our form upon sign in
+        const {emailSignInStart} = this.props;
+        const {email, password} = this.state;
+
+        emailSignInStart(email, password)
+
+        // Replacing with sagas: Lecture 203 | 'Email Sign In Into Sagas
+        // try {
+        //     await auth.signInWithEmailAndPassword(email, password);
+        //     this.setState({email: '', password: ''}) //clear out the state of our form upon sign in
     
-        } catch (error) {
-            // console.error(error)
-        };
+        // } catch (error) {
+        //     // console.error(error)
+        // };
     
 
     }
@@ -35,6 +41,7 @@ class SignIn extends Component {
     }
 
     render() {
+        const {googleSignInStart} = this.props
         return(
             <div className="sign-in">
                 <h2>
@@ -47,7 +54,7 @@ class SignIn extends Component {
                     <FormInput name="password" value={this.state.password} type="password" handleChange={this.handleChange} label="Password" required/>
                     <div className="buttons">
                         <CustomButton type="submit">Sign In</CustomButton>
-                        <CustomButton type="button" onClick={signInWithGoogle} isGoogleSignIn>Sign in with Google</CustomButton>
+                        <CustomButton type="button" onClick={googleSignInStart} isGoogleSignIn>Sign in with Google</CustomButton>
                     </div>
                 </form>
             </div>
@@ -55,4 +62,11 @@ class SignIn extends Component {
     }
 }
 
-export default SignIn;
+
+const mapDispatchToProps = (dispatch) => ({
+    googleSignInStart: () => dispatch(googleSignInStart()),
+    emailSignInStart: (email, password) => dispatch(emailSignInStart({email, password}))
+    // with the curly braces ({}) around email and password, we pass the parameters as objects where key and value are the same`
+})
+
+export default connect(null, mapDispatchToProps)(SignIn);

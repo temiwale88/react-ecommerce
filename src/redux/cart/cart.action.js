@@ -20,3 +20,7 @@ export const removeItem = item => ({
     type: CartActionTypes.REMOVE_ITEM,
     payload: item //this is the item we're trying to remove
 })
+
+export const clearCart = () => ({
+    type: CartActionTypes.CLEAR_CART,
+})

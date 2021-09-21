@@ -3,8 +3,11 @@ import {Switch, Route, Redirect} from 'react-router-dom';
 import './App.css';
 import {connect} from 'react-redux';
 // import {setCurrentUser} from './redux/user/user.actions';
-import {selectCurrentUser} from './redux/user/user.selectors'
 import {createStructuredSelector} from 'reselect';
+
+
+import {selectCurrentUser} from './redux/user/user.selectors'
+import {checkUserSession} from './redux/user/user.actions'
 
 import HomePage from './pages/homepage/homepage.component'
 import ShopPage from './pages/shop/shop.component'
@@ -31,6 +34,10 @@ class App extends Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
+    // this comes from userauth persistence lecture 206 "Recreating Persistence"
+    const {checkUserSession} = this.props;
+    checkUserSession();
+
     // setCurrentUser here and in this component comes from mapDispatchToProps which in turn comes from our import statement from user.action. We're destructuring it with {} from "this.props" which is passed in by the mapDispatchToProps function.
     // const {setCurrentUser} = this.props;
     // We will get current user and user state from firebase
@@ -85,8 +92,6 @@ class App extends Component {
     // (see docs here: https://firebase.google.com/docs/reference/js/firebase.auth.Auth#returns-firebase.unsubscribe)
 
     // so when unsubscribeFromAuth() is called inside the componentWillUnmount, it now has the value of firebase.unsubscribe(), which executes, closing the session."
-
-
   }
 
 
@@ -130,6 +135,10 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser
 })
 
+const mapDispatchToProps = dispatch => ({
+  checkUserSession: () => dispatch(checkUserSession())
+})
+
 // map "dispatch" to props of my App component
 // We're dispatching an action here:
 // const mapDispatchToProps = dispatch => ({
@@ -145,5 +154,5 @@ const mapStateToProps = createStructuredSelector({
 
 export default connect(
   mapStateToProps, //we will now have access to this.props.currentUser (in the App component?) lecture 119
-  // mapDispatchToProps
+  mapDispatchToProps
 )(App);

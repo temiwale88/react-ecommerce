@@ -9,3 +9,7 @@ See resources
 - Full and free course: https://egghead.io/lessons/react-redux-the-single-immutable-state-tree
 
 - See your cart-dropdown.component.jsx file for very explicit comments on how things work including mapStateToProps
+
+On sagas - see Yihua's illustration in lecture 205 - "Reviewing our sagas" for fetchCollectionStart action and similarly named saga (best practice)
+
+With Sagas, we separate the functional code related to actions, especially but not limited to those that trigger asynchronous or 'impure' events (e.g. api calls aka 'side effects'), and thus our components become purely action creators in this case.

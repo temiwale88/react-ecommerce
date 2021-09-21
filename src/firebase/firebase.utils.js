@@ -95,6 +95,17 @@ export const convertCollectionsSnapshotToMap = (collections) => {
     // console.log(transformedcollection)
 }
 
+// Lecture 206 - Recreating persistence - we're mimicking the behavior we will see if firebase is not our backend. We need a promise-based solution that our sagas can yield to.
+
+export const getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+        const unsubscribe = auth.onAuthStateChanged(userAuth => {
+            unsubscribe(); //immediately unsubscribe (why??)
+            resolve(userAuth);
+        }, reject);
+    })
+}
+
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 

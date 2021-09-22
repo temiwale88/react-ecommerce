@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component'
-import {auth, createUserProfileDocument} from '../../firebase/firebase.utils'
-
+// import {auth, createUserProfileDocument} from '../../firebase/firebase.utils'
+import {signUpStart} from '../../redux/user/user.actions'
 import './sign-up.styles.scss';
 
 class SignUp extends Component {
@@ -19,29 +20,34 @@ class SignUp extends Component {
 
     handleSubmit = async (event) => {
         event.preventDefault();
+
+        const {signUpStart} = this.props;
         const {displayName, email, password, confirmPassword} = this.state
         // handle password mismatch issues
         if(password !== confirmPassword) {
             alert("passwords don't match");
             return;
+        // } else {
         }
+        signUpStart({displayName, email, password})
 
-        try {
-            const {user} = await auth.createUserWithEmailAndPassword(email, password);
+        // Refactored after Lecture 210: Solution: Sign Up Saga 
+        // try {
+        //     const {user} = await auth.createUserWithEmailAndPassword(email, password);
 
-            // create user document in our nosql db (firebase)
-            await createUserProfileDocument(user, {displayName});
+        //     // create user document in our nosql db (firebase)
+        //     await createUserProfileDocument(user, {displayName});
 
-            // Then clear the form
-            this.setState({
-                displayName: '', 
-                email: '', 
-                password: '', 
-                confirmPassword: ''
-            })
-        } catch (error) {
-            console.error(error)
-        };
+        //     // Then clear the form
+        //     this.setState({
+        //         displayName: '', 
+        //         email: '', 
+        //         password: '', 
+        //         confirmPassword: ''
+        //     })
+        // } catch (error) {
+        //     console.error(error)
+        // };
 
     }
     
@@ -92,4 +98,8 @@ class SignUp extends Component {
     }
 }
 
-export default SignUp;
+const mapDispatchToProps = dispatch => ({
+    signUpStart: userCredentials => dispatch(signUpStart(userCredentials))
+})
+
+export default connect(null, mapDispatchToProps)(SignUp);

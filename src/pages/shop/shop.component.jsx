@@ -1,4 +1,4 @@
-import {React, Component} from 'react';
+import {React, useEffect} from 'react';
 import {Route} from 'react-router-dom';
 // import {createStructuredSelector} from 'reselect';
 import {connect} from 'react-redux'
@@ -28,7 +28,7 @@ import {fetchCollectionsStart} from '../../redux/shop/shop.actions'
 // )
 
 // lecture 179 - migrating shop data to firebase and bringing it back
-class ShopPage extends Component {
+const ShopPage = ({fetchCollectionsStart, match}) => {
 
     // same as calling a consturctor // super // this.state
     // state = {
@@ -36,10 +36,14 @@ class ShopPage extends Component {
     // }
     
     // unsubscribeFromSnapShot = null;
-    componentDidMount(){
-        // Lecture 188: Redux Thunk
-        const {fetchCollectionsStart} = this.props;
+
+    useEffect(() => {
         fetchCollectionsStart();
+    }, [fetchCollectionsStart])
+    // componentDidMount(){
+        // Lecture 188: Redux Thunk
+        // const {fetchCollectionsStart} = this.props;
+        // fetchCollectionsStart();
         // const {updateCollections} = this.props;
         // const collectionRef = firestore.collection('collections');
 
@@ -69,14 +73,14 @@ class ShopPage extends Component {
         // .then(response => response.json())
         // .then(collections => console.log(collections))
 
-    }
+    // }
 
 
-    render() {
-        const {match} = this.props;
+
+        // const {match} = this.props;
         // const {loading} = this.state;
 
-        return (
+    return (
         <div className='shop-page'>
             {/* <Route exact path = {`${match.path}`} component={CollectionsOverview} />
             <Route path={`${match.path}/:collectionId`} component={CollectionPage} /> */}
@@ -87,8 +91,7 @@ class ShopPage extends Component {
             {/* <Route exact path = {`${match.path}/:collectionId`} render={(props) => <CollectionsPageWithSpinner isLoading = {!isCollectionLoaded} {...props}/>} /> */}
             <Route exact path = {`${match.path}/:collectionId`} component = {CollectionPageContainer} />
         </div>
-        )
-    }
+    )
 }
 
 

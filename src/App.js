@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useEffect} from 'react';
 import {Switch, Route, Redirect} from 'react-router-dom';
 import './App.css';
 import {connect} from 'react-redux';
@@ -17,7 +17,7 @@ import CheckoutPage from './pages/checkout/checkout.component'
 
 // import {auth, createUserProfileDocument} from '../src/firebase/firebase.utils';
 
-class App extends Component {
+const App = ({checkUserSession, currentUser}) =>  {
 
   // We don't need the following anymore due to mapdispatchtoprop from redux below
   // constructor(props) {
@@ -31,93 +31,96 @@ class App extends Component {
   // But we will also close the open subscription to listening in for that user's signin or sign out state which we get from firebase
   // when we unmount the component? (lecture 96 - Google Auth lecture)
 
-  unsubscribeFromAuth = null;
+  // unsubscribeFromAuth = null;
 
-  componentDidMount() {
-    // this comes from userauth persistence lecture 206 "Recreating Persistence"
-    const {checkUserSession} = this.props;
-    checkUserSession();
+  // Alternative to componentDidMount
+  useEffect(() => {
+    checkUserSession()
+  }, [checkUserSession])
 
-    // setCurrentUser here and in this component comes from mapDispatchToProps which in turn comes from our import statement from user.action. We're destructuring it with {} from "this.props" which is passed in by the mapDispatchToProps function.
-    // const {setCurrentUser} = this.props;
-    // We will get current user and user state from firebase
-    // this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+  // componentDidMount() {
+  //   // this comes from userauth persistence lecture 206 "Recreating Persistence"
+  //   // const {checkUserSession} = this.props;
+  //   checkUserSession();
 
-    //   if(userAuth) {
-    //     // see lecture 104: checking if our db has updated with the user data
+  //   // setCurrentUser here and in this component comes from mapDispatchToProps which in turn comes from our import statement from user.action. We're destructuring it with {} from "this.props" which is passed in by the mapDispatchToProps function.
+  //   // const {setCurrentUser} = this.props;
+  //   // We will get current user and user state from firebase
+  //   // this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
 
-    //     // firebase api call for current user
-    //     const userRef = await createUserProfileDocument(userAuth);
+  //   //   if(userAuth) {
+  //   //     // see lecture 104: checking if our db has updated with the user data
 
-    //     //Firebase concepts: snapshot gives us actual data vs. reference to that data
-    //     userRef.onSnapshot(snapShot => {
-    //       setCurrentUser({
-    //         id: snapShot.id,
-    //         ...snapShot.data() // equals action.payload
-    //       })
+  //   //     // firebase api call for current user
+  //   //     const userRef = await createUserProfileDocument(userAuth);
 
-    //       // See lecture 118 (mapDispatchToProps) on why we no longer need "this.setState" hint: redux and user.actions.js file 
+  //   //     //Firebase concepts: snapshot gives us actual data vs. reference to that data
+  //   //     userRef.onSnapshot(snapShot => {
+  //   //       setCurrentUser({
+  //   //         id: snapShot.id,
+  //   //         ...snapShot.data() // equals action.payload
+  //   //       })
 
-    //       // this.setState({
-    //       //   currentUser: {
-    //       //     id: snapShot.id,
-    //       //     ...snapShot.data()
-    //       //   }
-    //       // });
-    //       // }, () =>  {console.log(this.state)});
-    //       // console.log(snapShot)
-    //       // console.log(snapShot.data())
-    //       // console.log(this.state)
-    //     })
-    //   } else {
-    //     setCurrentUser(userAuth);
-    //   }
+  //   //       // See lecture 118 (mapDispatchToProps) on why we no longer need "this.setState" hint: redux and user.actions.js file 
 
-    //   // this.setState({currentUser: userAuth}) //sets to null if user logs out (or not in db?)
+  //   //       // this.setState({
+  //   //       //   currentUser: {
+  //   //       //     id: snapShot.id,
+  //   //       //     ...snapShot.data()
+  //   //       //   }
+  //   //       // });
+  //   //       // }, () =>  {console.log(this.state)});
+  //   //       // console.log(snapShot)
+  //   //       // console.log(snapShot.data())
+  //   //       // console.log(this.state)
+  //   //     })
+  //   //   } else {
+  //   //     setCurrentUser(userAuth);
+  //   //   }
 
-    //   // createUserProfileDocument(userAuth) 
-    //   // this.setState({currentUser: userAuth})
+  //   //   // this.setState({currentUser: userAuth}) //sets to null if user logs out (or not in db?)
 
-    //   // console.log(user);
-    // })
-  }
+  //   //   // createUserProfileDocument(userAuth) 
+  //   //   // this.setState({currentUser: userAuth})
 
-  componentWillUnmount() {
-    this.unsubscribeFromAuth(); //closes the subscription
-    // See comment from classmate Alex #questions/10432834 on lecture 96
-    // "unsubscribeFromAuth is initialised as null
+  //   //   // console.log(user);
+  //   // })
+  // }
 
-    // unsubscribeFromAuth is reassigned to the return value of calling auth.onAuthStateChanged(). Yihua doesn't say this in the vid but this method returns another method: firebase.unsubscribe().
+  // componentWillUnmount() {
+  //   this.unsubscribeFromAuth(); //closes the subscription
+  //   // See comment from classmate Alex #questions/10432834 on lecture 96
+  //   // "unsubscribeFromAuth is initialised as null
 
-    // (see docs here: https://firebase.google.com/docs/reference/js/firebase.auth.Auth#returns-firebase.unsubscribe)
+  //   // unsubscribeFromAuth is reassigned to the return value of calling auth.onAuthStateChanged(). Yihua doesn't say this in the vid but this method returns another method: firebase.unsubscribe().
 
-    // so when unsubscribeFromAuth() is called inside the componentWillUnmount, it now has the value of firebase.unsubscribe(), which executes, closing the session."
-  }
+  //   // (see docs here: https://firebase.google.com/docs/reference/js/firebase.auth.Auth#returns-firebase.unsubscribe)
+
+  //   // so when unsubscribeFromAuth() is called inside the componentWillUnmount, it now has the value of firebase.unsubscribe(), which executes, closing the session."
+  // }
 
 
-  render() {
-    return (
-      <div>
-        <Header/> 
-        {/* Header exists outside of the Switch, like the footer, so we have it regargless of what page we're in */}
-        {/* Also, we're passing currentUser into Header because it has our 'sign out' link */}
-        <Switch>
-          <Route exact path ='/' component={HomePage} />
-          <Route path ='/shop' component={ShopPage} />
-          {/* We're not adding "exact" to the /shop Route because it's going to have nested routes e.g. shop/hats, shop/women etc. */}
-          <Route exact path ='/checkout' component={CheckoutPage} />
-          {/* <Route exact path ='/signin' component={SignInAndSignUpPage} /> */}
-          {/* We don't want to allow a signed in user to access the sign in page so we'll redirect them. Also upon first sign in we'll get redirected to homepage...see below! */}
-          <Route exact path ='/signin' render={() => 
-            this.props.currentUser ? 
-            (<Redirect to='/' />): (
-              <SignInAndSignUpPage/>
-            )} 
-          />
-        </Switch>
-      </div>
-    )  
-  }
+  return (
+    <div>
+      <Header/> 
+      {/* Header exists outside of the Switch, like the footer, so we have it regargless of what page we're in */}
+      {/* Also, we're passing currentUser into Header because it has our 'sign out' link */}
+      <Switch>
+        <Route exact path ='/' component={HomePage} />
+        <Route path ='/shop' component={ShopPage} />
+        {/* We're not adding "exact" to the /shop Route because it's going to have nested routes e.g. shop/hats, shop/women etc. */}
+        <Route exact path ='/checkout' component={CheckoutPage} />
+        {/* <Route exact path ='/signin' component={SignInAndSignUpPage} /> */}
+        {/* We don't want to allow a signed in user to access the sign in page so we'll redirect them. Also upon first sign in we'll get redirected to homepage...see below! */}
+        <Route exact path ='/signin' render={() => 
+          currentUser ? 
+          (<Redirect to='/' />): (
+            <SignInAndSignUpPage/>
+          )} 
+        />
+      </Switch>
+    </div>
+  )  
 }
 
 // destructure our 'user' reducer by {user}

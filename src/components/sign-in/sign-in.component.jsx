@@ -1,4 +1,4 @@
-import React, {Component} from "react"; 
+import React, {useState} from "react"; 
 import FormInput from '../../components/form-input/form-input.component'
 import CustomButton from '../../components/custom-button/custom-button.component'
 import {connect} from 'react-redux'
@@ -6,20 +6,23 @@ import {connect} from 'react-redux'
 import {googleSignInStart, emailSignInStart} from '../../redux/user/user.actions'
 import './sign-in.styles.scss'
 
-class SignIn extends Component {
-    constructor(props) {
-        super(props);
+const SignIn = ({emailSignInStart, googleSignInStart}) => {
 
-        this.state = {
-            email: '',
-            password: ''
-        }
-    }
+    const [userCredentials, setUserCredentials] = useState({email: '', password: ''})
+    
+    // constructor(props) {
+    //     super(props);
 
-    handleSubmit = async event => { //remember that arrow function binds this function to the class automatically -> this.handleSubmit
+    //     this.state = {
+    //         email: '',
+    //         password: ''
+    //     }
+    // }
+
+    const {email, password} = userCredentials
+    const handleSubmit = async event => { //remember that arrow function binds this function to the class automatically -> this.handleSubmit
         event.preventDefault(); //preventing default form behavior so we have full control over what happens
-        const {emailSignInStart} = this.props;
-        const {email, password} = this.state;
+        // const {emailSignInStart} = this.props;
 
         emailSignInStart(email, password)
 
@@ -35,32 +38,31 @@ class SignIn extends Component {
 
     }
   
-    handleChange = event => {
+    const handleChange = event => {
         const {value, name} = event.target //pulling name from below and value from user input
-        this.setState({[name]: value}) //so name could be email or password like in our state- dynamically assigning variables in ES6
+        setUserCredentials({...userCredentials, [name]: value}) //so name could be email or password like in our state- dynamically assigning variables in ES6
     }
 
-    render() {
-        const {googleSignInStart} = this.props
-        return(
-            <div className="sign-in">
-                <h2>
-                    I already have an account
-                </h2>
-                <span>Sign in with your email and password</span>
+    // const {googleSignInStart} = this.props
+    return (
+        <div className="sign-in">
+            <h2>
+                I already have an account
+            </h2>
+            <span>Sign in with your email and password</span>
 
-                <form onSubmit={this.handleSubmit}>
-                    <FormInput name="email" value={this.state.email} type="email" handleChange={this.handleChange} label="Email" required/>
-                    <FormInput name="password" value={this.state.password} type="password" handleChange={this.handleChange} label="Password" required/>
-                    <div className="buttons">
-                        <CustomButton type="submit">Sign In</CustomButton>
-                        <CustomButton type="button" onClick={googleSignInStart} isGoogleSignIn>Sign in with Google</CustomButton>
-                    </div>
-                </form>
-            </div>
-        )
-    }
+            <form onSubmit={handleSubmit}>
+                <FormInput name="email" value={email} type="email" handleChange={handleChange} label="Email" required/>
+                <FormInput name="password" value={password} type="password" handleChange={handleChange} label="Password" required/>
+                <div className="buttons">
+                    <CustomButton type="submit">Sign In</CustomButton>
+                    <CustomButton type="button" onClick={googleSignInStart} isGoogleSignIn>Sign in with Google</CustomButton>
+                </div>
+            </form>
+        </div>
+    )
 }
+
 
 
 const mapDispatchToProps = (dispatch) => ({

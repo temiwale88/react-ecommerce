@@ -42,7 +42,6 @@ And then we will dispatch that new object into our store and it'll go through ou
 
 const mapDispatchToProps = dispatch => ({
     addItem: item => dispatch(addItem(item))
-    // the 1st addItem is a function
 })
 
 // We're not mapping state to props (mapStateToProps) thus the first value is "null". Because each collection item isn't receiving a state (it's stateless) but is indeed changing a state by dispatching an action that changes state (adds that item). We do so by clicking the "Add To Cart" button by mapping our "addItem" fxn created in the mapDispatchToProps function above into the onClick function in the "Add To Cart" button.

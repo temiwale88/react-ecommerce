@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
 import {Switch, Route, Redirect} from 'react-router-dom';
 import './App.css';
-import {connect} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 // import {setCurrentUser} from './redux/user/user.actions';
-import {createStructuredSelector} from 'reselect';
+// import {createStructuredSelector} from 'reselect';
 
 
 import {selectCurrentUser} from './redux/user/user.selectors'
@@ -17,7 +17,22 @@ import CheckoutPage from './pages/checkout/checkout.component'
 
 // import {auth, createUserProfileDocument} from '../src/firebase/firebase.utils';
 
-const App = ({checkUserSession, currentUser}) =>  {
+const App = () =>  {
+
+  // using the useSelector hook vs. mapStateToProps: Lecture 223 (React-Redux Hooks)
+  const currentUser = useSelector(selectCurrentUser);
+
+  // const currentUser = useSelector((state / selectCurrentUser) => {
+  //   console.log(state / selectCurrentUser)
+  // });
+
+
+  // using the useDispatch hook vs. mapDispatchToProps: Lecture 224 (useDispatch)
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkUserSession())
+  }, [dispatch])
 
   // We don't need the following anymore due to mapdispatchtoprop from redux below
   // constructor(props) {
@@ -33,10 +48,10 @@ const App = ({checkUserSession, currentUser}) =>  {
 
   // unsubscribeFromAuth = null;
 
-  // Alternative to componentDidMount
-  useEffect(() => {
-    checkUserSession()
-  }, [checkUserSession])
+  // // Alternative to componentDidMount
+  // useEffect(() => {
+  //   checkUserSession()
+  // }, [checkUserSession])
 
   // componentDidMount() {
   //   // this comes from userauth persistence lecture 206 "Recreating Persistence"
@@ -133,14 +148,14 @@ const App = ({checkUserSession, currentUser}) =>  {
 //   currentUser: selectCurrentUser(state)
 // })
 
-// With createStructuredSelector
-const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser
-})
+// // With createStructuredSelector
+// const mapStateToProps = createStructuredSelector({
+//   currentUser: selectCurrentUser
+// })
 
-const mapDispatchToProps = dispatch => ({
-  checkUserSession: () => dispatch(checkUserSession())
-})
+// const mapDispatchToProps = dispatch => ({
+//   checkUserSession: () => dispatch(checkUserSession())
+// })
 
 // map "dispatch" to props of my App component
 // We're dispatching an action here:
@@ -155,7 +170,9 @@ const mapDispatchToProps = dispatch => ({
 //   // setCurrentUser here comes from our import statement from user.action
 // })
 
-export default connect(
-  mapStateToProps, //we will now have access to this.props.currentUser (in the App component?) lecture 119
-  mapDispatchToProps
-)(App);
+// export default connect(
+//   mapStateToProps, //we will now have access to this.props.currentUser (in the App component?) lecture 119
+//   mapDispatchToProps
+// )(App);
+
+export default App;

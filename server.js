@@ -4,6 +4,7 @@ import express from 'express';
 import path from 'path';
 // import enforce from "express-sslify"
 import dotenv from 'dotenv'
+const __dirname = path.resolve();
 
 dotenv.config({ silent: process.env.NODE_ENV === 'production' });
  

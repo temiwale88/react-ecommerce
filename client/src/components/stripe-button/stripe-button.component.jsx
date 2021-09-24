@@ -1,5 +1,6 @@
 import React from 'react';
 import StripeCheckout from 'react-stripe-checkout';
+import axios from 'axios';
 
 const StripeCheckoutButton = ({price}) => {
     const priceForStripe = price * 100;
@@ -8,8 +9,26 @@ const StripeCheckoutButton = ({price}) => {
 
     // Ideally we'll pass the token to a backend to process the charge but since we're testing...
     const onToken = token => {
-        console.log(token);
-        alert('Payment Successful')
+        // console.log(token);
+        // console.alert('Payment Successful')
+        // axios knows we going to our 'payment' route
+        // axios is an alternative for 'fetch' but more comprehensive
+        axios({
+            url: 'payment',
+            method: 'post',
+            data: {
+                amount: priceForStripe,
+                token
+                // token: token
+            }
+        }).then(response => {
+            alert('Payment successful')
+        }).catch(error => {
+            console.log('Payment error: ', JSON.parse(error))
+            alert(
+                'There was an issue with your payment. Please ensure you use the provided credit card'
+            )
+        })
     }
 
     return (

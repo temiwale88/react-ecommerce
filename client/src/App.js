@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {lazy, Suspense, useEffect} from 'react';
 import {Switch, Route, Redirect} from 'react-router-dom';
 import './App.css';
 import {useSelector, useDispatch} from 'react-redux';
@@ -9,13 +9,19 @@ import {useSelector, useDispatch} from 'react-redux';
 import {selectCurrentUser} from './redux/user/user.selectors'
 import {checkUserSession} from './redux/user/user.actions'
 
-import HomePage from './pages/homepage/homepage.component'
-import ShopPage from './pages/shop/shop.component'
+// import HomePage from './pages/homepage/homepage.component'
+// import ShopPage from './pages/shop/shop.component'
 import Header from './components/header/header.component'
-import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component'
-import CheckoutPage from './pages/checkout/checkout.component'
-
+import Spinner from './components/spinner/spinner.component'
+// import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component'
+// import CheckoutPage from './pages/checkout/checkout.component'
 // import {auth, createUserProfileDocument} from '../src/firebase/firebase.utils';
+
+// Lazy loading for code splitting: Lecture 280: React Lazy + Suspense
+const HomePage = lazy(() => import('./pages/homepage/homepage.component'))
+const ShopPage = lazy(() => import('./pages/shop/shop.component'))
+const SignInAndSignUpPage = lazy(() => import('./pages/sign-in-and-sign-up/sign-in-and-sign-up.component'))
+const CheckoutPage = lazy(() => import('./pages/checkout/checkout.component'))
 
 const App = () =>  {
 
@@ -121,18 +127,20 @@ const App = () =>  {
       {/* Header exists outside of the Switch, like the footer, so we have it regargless of what page we're in */}
       {/* Also, we're passing currentUser into Header because it has our 'sign out' link */}
       <Switch>
-        <Route exact path ='/' component={HomePage} />
-        <Route path ='/shop' component={ShopPage} />
-        {/* We're not adding "exact" to the /shop Route because it's going to have nested routes e.g. shop/hats, shop/women etc. */}
-        <Route exact path ='/checkout' component={CheckoutPage} />
-        {/* <Route exact path ='/signin' component={SignInAndSignUpPage} /> */}
-        {/* We don't want to allow a signed in user to access the sign in page so we'll redirect them. Also upon first sign in we'll get redirected to homepage...see below! */}
-        <Route exact path ='/signin' render={() => 
-          currentUser ? 
-          (<Redirect to='/' />): (
-            <SignInAndSignUpPage/>
-          )} 
-        />
+        <Suspense fallback={<Spinner/>}>
+          <Route exact path ='/' component={HomePage} />
+          <Route path ='/shop' component={ShopPage} />
+          {/* We're not adding "exact" to the /shop Route because it's going to have nested routes e.g. shop/hats, shop/women etc. */}
+          <Route exact path ='/checkout' component={CheckoutPage} />
+          {/* <Route exact path ='/signin' component={SignInAndSignUpPage} /> */}
+          {/* We don't want to allow a signed in user to access the sign in page so we'll redirect them. Also upon first sign in we'll get redirected to homepage...see below! */}
+          <Route exact path ='/signin' render={() => 
+            currentUser ? 
+            (<Redirect to='/' />): (
+              <SignInAndSignUpPage/>
+              )} 
+          />
+        </Suspense>
       </Switch>
     </div>
   )  

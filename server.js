@@ -5,6 +5,7 @@ import path from 'path';
 // import enforce from "express-sslify"
 import dotenv from 'dotenv'
 const __dirname = path.resolve();
+import compression from 'compression';
 
 dotenv.config({ silent: process.env.NODE_ENV === 'production' });
  
@@ -16,6 +17,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 const app = express();
 const port = process.env.PORT || 5000;
 
+// Lecture 287: Gzipping and compression to optimize our build as Heroku won't do this for us
+
+app.use(compression)
 app.use(express.json())
 app.use(express.urlencoded({
     extended: true

@@ -19,7 +19,7 @@ const port = process.env.PORT || 5000;
 
 // Lecture 287: Gzipping and compression to optimize our build as Heroku won't do this for us
 
-app.use(compression)
+app.use(compression())
 app.use(express.json())
 app.use(express.urlencoded({
     extended: true
